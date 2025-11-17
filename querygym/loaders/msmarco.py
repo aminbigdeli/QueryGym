@@ -8,7 +8,7 @@ Users should download MS MARCO datasets using ir_datasets or official scripts:
     dataset = ir_datasets.load("msmarco-passage/dev")
     # Then export to local files
 
-Then use these helpers to load the data into queryGym format.
+Then use these helpers to load the data into querygym format.
 """
 
 from pathlib import Path
@@ -33,7 +33,7 @@ def load_queries(
         List of QueryItem objects
         
     Example:
-        >>> from queryGym.datasets import msmarco
+        >>> from querygym.datasets import msmarco
         >>> queries = msmarco.load_queries("./data/msmarco_queries.tsv")
     """
     queries_tsv = Path(queries_tsv)
@@ -67,7 +67,7 @@ def load_qrels(
         Dict mapping qid -> {docid -> relevance}
         
     Example:
-        >>> from queryGym.datasets import msmarco
+        >>> from querygym.datasets import msmarco
         >>> qrels = msmarco.load_qrels("./data/msmarco_qrels.tsv")
     """
     qrels_tsv = Path(qrels_tsv)
@@ -120,7 +120,7 @@ def load_collection(
         Dict mapping docid -> text
         
     Example:
-        >>> from queryGym.datasets import msmarco
+        >>> from querygym.datasets import msmarco
         >>> collection = msmarco.load_collection("./data/collection.tsv")
         >>> collection["doc123"]
     """

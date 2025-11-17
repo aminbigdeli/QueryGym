@@ -7,7 +7,7 @@ Users should download BEIR datasets using the official BEIR library:
     from beir.datasets.data_loader import GenericDataLoader
     data_path = GenericDataLoader("nfcorpus").download_and_unzip()
 
-Then use these helpers to load the data into queryGym format.
+Then use these helpers to load the data into querygym format.
 """
 
 from pathlib import Path
@@ -36,7 +36,7 @@ def load_queries(
         List of QueryItem objects
         
     Example:
-        >>> from queryGym.datasets import beir
+        >>> from querygym.datasets import beir
         >>> queries = beir.load_queries("./data/nfcorpus")
     """
     beir_data_dir = Path(beir_data_dir)
@@ -75,7 +75,7 @@ def load_qrels(
         Dict mapping qid -> {docid -> relevance}
         
     Example:
-        >>> from queryGym.datasets import beir
+        >>> from querygym.datasets import beir
         >>> qrels = beir.load_qrels("./data/nfcorpus", split="test")
     """
     beir_data_dir = Path(beir_data_dir)
@@ -130,7 +130,7 @@ def load_corpus(
         Dict mapping doc_id -> {"title": ..., "text": ...}
         
     Example:
-        >>> from queryGym.datasets import beir
+        >>> from querygym.datasets import beir
         >>> corpus = beir.load_corpus("./data/nfcorpus")
         >>> corpus["doc123"]["title"]
     """

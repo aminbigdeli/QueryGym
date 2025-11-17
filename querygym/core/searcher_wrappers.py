@@ -3,7 +3,7 @@
 Convenience functions for users to easily wrap their own searchers.
 
 This module provides helper functions that allow users to quickly wrap
-their existing Pyserini or PyTerrier searchers for use with queryGym.
+their existing Pyserini or PyTerrier searchers for use with querygym.
 
 Note: This module does NOT import Pyserini or PyTerrier at the module level.
 Imports are done inside functions to maintain library independence.
@@ -15,7 +15,7 @@ from .searcher import BaseSearcher, SearchHit
 
 def wrap_pyserini_searcher(pyserini_searcher, answer_key: str = "contents") -> BaseSearcher:
     """
-    Wrap a user's Pyserini searcher for use with queryGym.
+    Wrap a user's Pyserini searcher for use with querygym.
     
     This function works standalone - it doesn't import Pyserini at the module level.
     The user must provide their own Pyserini searcher instance.
@@ -25,7 +25,7 @@ def wrap_pyserini_searcher(pyserini_searcher, answer_key: str = "contents") -> B
         answer_key: Field name(s) to extract content from (pipe-separated)
         
     Returns:
-        BaseSearcher instance that can be used with queryGym
+        BaseSearcher instance that can be used with querygym
         
     Example:
         >>> from pyserini.search.lucene import LuceneSearcher
@@ -107,7 +107,7 @@ def wrap_pyserini_searcher(pyserini_searcher, answer_key: str = "contents") -> B
 
 def wrap_pyterrier_retriever(pyterrier_retriever, index, text_field: str = "text") -> BaseSearcher:
     """
-    Wrap a user's PyTerrier retriever for use with queryGym.
+    Wrap a user's PyTerrier retriever for use with querygym.
     
     This function works standalone - it doesn't import PyTerrier at the module level.
     The user must provide their own PyTerrier retriever and index instances.
@@ -118,7 +118,7 @@ def wrap_pyterrier_retriever(pyterrier_retriever, index, text_field: str = "text
         text_field: Field name containing document text
         
     Returns:
-        BaseSearcher instance that can be used with queryGym
+        BaseSearcher instance that can be used with querygym
         
     Example:
         >>> import pyterrier as pt
@@ -219,7 +219,7 @@ def wrap_custom_searcher(search_func, batch_search_func=None, searcher_name: str
         searcher_name: Name for the searcher
         
     Returns:
-        BaseSearcher instance that can be used with queryGym
+        BaseSearcher instance that can be used with querygym
         
     Example:
         >>> def my_search(query, k):

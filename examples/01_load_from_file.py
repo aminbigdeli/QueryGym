@@ -1,5 +1,5 @@
 """Load queries from local files"""
-import queryGym as qg
+import querygym as qg
 from pathlib import Path
 
 example_dir = Path(__file__).parent

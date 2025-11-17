@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-PyTerrier Searcher Adapter for queryGym
+PyTerrier Searcher Adapter for querygym
 
 This module provides an adapter that wraps PyTerrier's search functionality
-to implement the queryGym BaseSearcher interface.
+to implement the querygym BaseSearcher interface.
 """
 
 import pandas as pd
@@ -16,7 +16,7 @@ class PyTerrierSearcher(BaseSearcher):
     PyTerrier adapter implementing the BaseSearcher interface.
     
     This adapter wraps PyTerrier's search functionality to provide
-    a standardized interface for queryGym.
+    a standardized interface for querygym.
     """
     
     def __init__(self, index_path: Optional[str] = None, 

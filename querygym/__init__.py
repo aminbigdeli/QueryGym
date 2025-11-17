@@ -1,8 +1,8 @@
 """
-queryGym: LLM-based Query Reformulation Toolkit
+querygym: LLM-based Query Reformulation Toolkit
 
 Simple usage:
-    import queryGym as qg
+    import querygym as qg
     
     # Create a reformulator
     reformulator = qg.create_reformulator("genqr_ensemble")
@@ -76,7 +76,7 @@ def create_reformulator(
         BaseReformulator instance
     
     Example:
-        >>> import queryGym as qg
+        >>> import querygym as qg
         >>> reformulator = qg.create_reformulator("genqr_ensemble", model="gpt-4")
         >>> result = reformulator.reformulate(qg.QueryItem("q1", "what causes diabetes"))
     """

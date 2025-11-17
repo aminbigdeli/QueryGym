@@ -1,5 +1,5 @@
 """Load BEIR and MS MARCO datasets"""
-import queryGym as qg
+import querygym as qg
 
 # BEIR dataset (assumes already downloaded)
 beir_path = "./data/beir/nfcorpus"

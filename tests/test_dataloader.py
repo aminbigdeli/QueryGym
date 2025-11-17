@@ -1,4 +1,4 @@
-from queryGym.data.dataloader import DataLoader
+from querygym.data.dataloader import DataLoader
 from pathlib import Path
 import tempfile
 

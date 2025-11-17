@@ -1,5 +1,5 @@
 """Use Pyserini and PyTerrier adapters"""
-import queryGym as qg
+import querygym as qg
 
 # Pyserini adapter
 from pyserini.search.lucene import LuceneSearcher

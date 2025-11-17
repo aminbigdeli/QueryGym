@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Abstract Searcher Interface for queryGym
+Abstract Searcher Interface for querygym
 
 This module defines the interface that any searcher implementation must follow
-to be compatible with queryGym's retrieval framework.
+to be compatible with querygym's retrieval framework.
 """
 
 from abc import ABC, abstractmethod
@@ -29,7 +29,7 @@ class BaseSearcher(ABC):
     Abstract base class for searcher implementations.
     
     Any searcher library (Pyserini, PyTerrier, etc.) can implement this interface
-    to be compatible with queryGym's retrieval framework.
+    to be compatible with querygym's retrieval framework.
     """
     
     @abstractmethod

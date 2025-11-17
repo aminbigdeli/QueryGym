@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Pyserini Searcher Adapter for queryGym
+Pyserini Searcher Adapter for querygym
 
 This module provides an adapter that wraps Pyserini's LuceneSearcher and LuceneImpactSearcher
-to implement the queryGym BaseSearcher interface.
+to implement the querygym BaseSearcher interface.
 """
 
 import os
@@ -17,7 +17,7 @@ class PyseriniSearcher(BaseSearcher):
     Pyserini adapter implementing the BaseSearcher interface.
     
     This adapter wraps Pyserini's LuceneSearcher and LuceneImpactSearcher
-    to provide a standardized interface for queryGym.
+    to provide a standardized interface for querygym.
     """
     
     def __init__(self, index: str, searcher_type: str = "bm25", 
