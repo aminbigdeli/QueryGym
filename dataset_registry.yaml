@@ -1,7 +1,8 @@
 version: 1
 notes: >
-  Dataset registry containing query, qrels, index, and BM25 weighting
-  configurations for reproducible retrieval experiments.
+  Dataset registry containing Pyserini index names, topic/qrels references, 
+  and BM25 weighting configurations for reproducible retrieval experiments.
+  This file is specifically designed for Pyserini prebuilt indices and topics.
 
 datasets:
 
@@ -14,10 +15,10 @@ datasets:
     topics:
       name: "msmarco-v1-passage.dev"
     qrels:
-      name: "qrels.msmarco-v1-passage.dev.txt"  
+      name: "msmarco-v1-passage.dev"  
     bm25_weights:
-      k1: 0.9
-      b: 0.4
+      k1: 0.82
+      b: 0.68
     output:
       runfile_template: "run.msmarco-v1-passage.bm25-default.dev.txt"
       eval_metrics: ["recip_rank", "recall.1000"]
@@ -29,7 +30,7 @@ datasets:
     topics:
       name: "dl19-passage"
     qrels:
-      name: "qrels.dl19-passage.txt" 
+      name: "dl19-passage" 
     bm25_weights:
       k1: 0.9
       b: 0.4
@@ -44,7 +45,7 @@ datasets:
     topics:
       name: "dl20-passage"
     qrels:
-      name: "qrels.dl20-passage.txt" 
+      name: "dl20-passage" 
     bm25_weights:
       k1: 0.9
       b: 0.4
