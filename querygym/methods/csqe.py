@@ -200,4 +200,3 @@ class CSQE(BaseReformulator):
             "k": int(self.cfg.params.get("retrieval_k", 10)),
             "threads": int(self.cfg.params.get("threads", 16)),
         }
-

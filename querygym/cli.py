@@ -40,6 +40,16 @@ def run(method: str = typer.Option(...),
         prompt_bank: Path = typer.Option(Path(__file__).with_name("prompt_bank.yaml"), "--prompt-bank"),
         ctx_jsonl: Optional[Path] = typer.Option(None, "--ctx-jsonl", help="Optional contexts JSONL"),
         output_format: str = typer.Option("both", "--output-format", help="Output format: 'concat', 'plain', or 'both' (default: both)"),
+        parallel: Optional[bool] = typer.Option(None, "--parallel", help="Enable parallel generation for methods like MuGI"),
+        mode: Optional[str] = typer.Option(None, "--mode", help="Mode for methods: 'zs' (zero-shot) or 'fs' (few-shot)"),
+        # Few-shot data loading options
+        dataset_type: Optional[str] = typer.Option(None, "--dataset-type", help="Dataset type: 'msmarco', 'beir', or 'generic'"),
+        collection_path: Optional[Path] = typer.Option(None, "--collection-path", help="Path to collection file (TSV for MS MARCO/generic)"),
+        train_queries_path: Optional[Path] = typer.Option(None, "--train-queries-path", help="Path to training queries file"),
+        train_qrels_path: Optional[Path] = typer.Option(None, "--train-qrels-path", help="Path to training qrels file"),
+        beir_data_dir: Optional[Path] = typer.Option(None, "--beir-data-dir", help="Path to BEIR dataset directory"),
+        train_split: Optional[str] = typer.Option(None, "--train-split", help="BEIR train split: 'train' or 'dev'"),
+        num_examples: Optional[int] = typer.Option(None, "--num-examples", help="Number of few-shot examples"),
 ):
     import yaml
     import os
@@ -57,13 +67,36 @@ def run(method: str = typer.Option(...),
         
         return re.sub(r'\$\{([^}]+)\}', replace_env_var, text)
     
-    if cfg_path:
-        yaml_content = cfg_path.read_text()
-        expanded_content = expand_env_vars(yaml_content)
-        cfg = yaml.safe_load(expanded_content)
-    else:
-        cfg = {}
-    mc = MethodConfig(name=method, params=cfg.get("params",{}), llm=cfg["llm"],
+    # Default to defaults.yaml if no config path provided
+    if cfg_path is None:
+        cfg_path = Path(__file__).parent / "config" / "defaults.yaml"
+    
+    yaml_content = cfg_path.read_text()
+    expanded_content = expand_env_vars(yaml_content)
+    cfg = yaml.safe_load(expanded_content)
+    
+    # Override parameters if provided via CLI
+    params = cfg.get("params", {})
+    if parallel is not None:
+        params["parallel"] = parallel
+    if mode is not None:
+        params["mode"] = mode
+    if dataset_type is not None:
+        params["dataset_type"] = dataset_type
+    if collection_path is not None:
+        params["collection_path"] = str(collection_path)
+    if train_queries_path is not None:
+        params["train_queries_path"] = str(train_queries_path)
+    if train_qrels_path is not None:
+        params["train_qrels_path"] = str(train_qrels_path)
+    if beir_data_dir is not None:
+        params["beir_data_dir"] = str(beir_data_dir)
+    if train_split is not None:
+        params["train_split"] = train_split
+    if num_examples is not None:
+        params["num_examples"] = num_examples
+    
+    mc = MethodConfig(name=method, params=params, llm=cfg["llm"],
                       seed=cfg.get("seed",42), retries=cfg.get("retries",2))
     src = UnifiedQuerySource(backend="local", format="tsv", path=queries_tsv)
     queries = list(src.iter())
@@ -114,18 +147,18 @@ def run(method: str = typer.Option(...),
                 # Query2Doc: qid \t passage
                 w.writerow(["qid", "passage"])
             elif method == "genqr":
-                # GenQR: qid \t keyword_1 \t keyword_2 \t ... \t keyword_n
-                # Determine number of keywords from first result
+                # GenQR: qid \t reformulation_1 \t reformulation_2 \t ... \t reformulation_n
+                # Determine number of reformulations from first result
                 if results:
-                    keywords = results[0].metadata.get("keywords", [])
-                    if isinstance(keywords, list) and keywords:
-                        num_keywords = len(keywords)
+                    reformulations = results[0].metadata.get("reformulations", [])
+                    if isinstance(reformulations, list) and reformulations:
+                        num_reformulations = len(reformulations)
                     else:
-                        num_keywords = 10  # Default estimate
-                    header = ["qid"] + [f"keyword_{i+1}" for i in range(num_keywords)]
+                        num_reformulations = 5  # Default estimate
+                    header = ["qid"] + [f"reformulation_{i+1}" for i in range(num_reformulations)]
                     w.writerow(header)
                 else:
-                    w.writerow(["qid", "keyword_1", "keyword_2", "keyword_3", "keyword_4", "keyword_5"])
+                    w.writerow(["qid", "reformulation_1", "reformulation_2", "reformulation_3", "reformulation_4", "reformulation_5"])
             elif method == "qa_expand":
                 # QA-Expand: qid \t final_refined_query
                 w.writerow(["qid", "refined_query"])
@@ -185,23 +218,29 @@ def run(method: str = typer.Option(...),
                     cleaned_passage = clean_text(passage)
                     w.writerow([r.qid, cleaned_passage])
                 elif method == "genqr":
-                    # GenQR: qid \t keywords
-                    keywords = r.metadata.get("keywords", [])
-                    if isinstance(keywords, list):
-                        cleaned_keywords = [clean_text(k) for k in keywords]
-                        w.writerow([r.qid] + cleaned_keywords)
+                    # GenQR: qid \t reformulations
+                    reformulations = r.metadata.get("reformulations", [])
+                    if isinstance(reformulations, list):
+                        cleaned_reformulations = [clean_text(k) for k in reformulations]
+                        w.writerow([r.qid] + cleaned_reformulations)
                     else:
-                        cleaned_keywords = clean_text(keywords)
-                        w.writerow([r.qid, cleaned_keywords])
+                        cleaned_reformulations = clean_text(reformulations)
+                        w.writerow([r.qid, cleaned_reformulations])
                 elif method == "qa_expand":
                     # QA-Expand: qid \t final_refined_query
                     final_q = r.metadata.get("final_q", "")
                     cleaned_final_q = clean_text(final_q)
                     w.writerow([r.qid, cleaned_final_q])
                 elif method == "mugi":
-                    # MuGI: qid \t pseudo_document
-                    pseudo = r.metadata.get("pseudo", "")
-                    cleaned_pseudo = clean_text(pseudo)
+                    # MuGI: qid \t pseudo_document (all 5 joined)
+                    pseudo_docs = []
+                    for i in range(1, 6):
+                        doc = r.metadata.get(f"pseudo_doc_{i}", "")
+                        if doc:
+                            pseudo_docs.append(doc)
+                    # Join all pseudo-docs into single text
+                    all_pseudo = " ".join(pseudo_docs)
+                    cleaned_pseudo = clean_text(all_pseudo)
                     w.writerow([r.qid, cleaned_pseudo])
                 elif method == "genqr_ensemble":
                     # GenQREnsemble: qid \t keyword_1 \t keyword_2 \t ... \t keyword_n
