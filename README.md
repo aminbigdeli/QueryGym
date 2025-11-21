@@ -4,6 +4,10 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<div align="center">
+  <img src="docs/querygym-logo.png" alt="QueryGym Logo" width="600">
+</div>
+
 # QueryGym
 
 A lightweight, reproducible toolkit for **LLM-based query reformulation**.
