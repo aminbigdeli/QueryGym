@@ -73,16 +73,16 @@ cd querygym_pyserini/
 ## 📚 Learning Path
 
 **Beginner:**
-1. Start with [snippets](snippets/) to learn the basics
-2. Try [docker](docker/) for a containerized environment
+- Start with [snippets](snippets/) to learn the basics
+- Try [docker](docker/) for a containerized environment
 
 **Intermediate:**
-3. Explore different reformulation methods in snippets
-4. Run Jupyter notebooks in Docker
+- Explore different reformulation methods in snippets
+- Run Jupyter notebooks in Docker
 
 **Advanced:**
-5. Build complete pipelines with [querygym_pyserini](querygym_pyserini/)
-6. Integrate with your own retrieval systems
+- Build complete pipelines with [querygym_pyserini](querygym_pyserini/)
+- Integrate with your own retrieval systems
 
 ## 🔗 Additional Resources
 
